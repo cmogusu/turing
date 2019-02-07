@@ -1,0 +1,75 @@
+header{
+  background: #f79400;
+  color: #fff;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link{
+  color: #eee;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.25 ease;
+  font-size: 0.95rem;
+}
+a.nav-link:hover{
+  color: #fff;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.title{
+  color: #f79400;
+}
+
+.beer > div{
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 3rem;
+  box-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.5s ease;
+}
+.beer:hover > div{
+  box-shadow: 1px 1px 15px 0 rgba(0, 0, 0, 0.35)
+}
+.beer img{
+  max-height: 200px;
+}
+
+.beer-page hr{
+  width: 30%;
+  margin-left: 0;
+  border: 3px solid #721f61;
+}
+
+.recommended-beer img{
+  max-height: 150px;
+}
+.recommended-beer .title{
+  font-size: 1rem;
+}
+
+.load-next-page{
+  background: #eee;
+  padding: 5px;
+  width: 100%;
+}
+
+.modal-bg{
+  max-width: 90vw;
+  max-height: 90vh;
+  background: #fff;
+  overflow: auto;
+}
+
+.centered-modal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
