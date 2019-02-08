@@ -30,8 +30,8 @@ function Modal(props: Props) {
       onClose={onClose}
       className="centered-modal"
     >
-      <div className="modal-bg rounded p-3">
-        <div className="overflow-auto">
+      <div className="modal-bg rounded p-3 overflow-auto">
+        <div className="overflow-hidden">
           <button type="button" className="close" aria-label="Close" onClick={onClose}>
             <span aria-hidden="true">&times;</span>
           </button>

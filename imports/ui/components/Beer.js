@@ -10,31 +10,29 @@ type Props = {
     image_url: string,
   },
   setClicked: Function,
-  toggleFavourite: Function,
-  loadBeerImageOnScroll?: Function,
+  animateBeerOnScroll?: Function,
 };
 
 
 class Beer extends React.Component<Props> {
   static defaultProps = {
-    loadBeerImageOnScroll: null,
+    animateBeerOnScroll: null,
   };
 
-  imageElement = null;
-
+  wrapperElement = null;
 
   componentDidMount() {
-    const { loadBeerImageOnScroll } = this.props;
+    const { animateBeerOnScroll } = this.props;
 
-    if (loadBeerImageOnScroll) {
-      loadBeerImageOnScroll(this.imgElement);
+    if (animateBeerOnScroll && this.wrapperElement) {
+      animateBeerOnScroll(this.wrapperElement);
     }
   }
 
 
   handleKeyUp = (event) => {
     const { setClicked } = this.props;
-    
+
     if (event.which === 13) {
       setClicked();
     }
@@ -45,7 +43,6 @@ class Beer extends React.Component<Props> {
     const {
       beer,
       setClicked,
-      toggleFavourite,
     } = this.props;
     const {
       name,
@@ -55,7 +52,10 @@ class Beer extends React.Component<Props> {
 
     return (
       <div className="col-lg-4 col-md-6 beer mb-3">
-        <div className="text-center p-3 mr-3 border rounded h-100">
+        <div
+          className="text-center p-3 mr-md-3 border rounded h-100"
+          ref={(element) => { this.wrapperElement = element; }}
+        >
           <div
             role="button"
             tabIndex={0}
@@ -66,13 +66,12 @@ class Beer extends React.Component<Props> {
               alt={name}
               src="placeholder.jpg"
               data-src={imageUrl}
-              ref={(element) => { this.imgElement = element; }}
-              className="img-fluid lazy-load"
+              className="img-fluid lazy-load beer-image"
             />
             <h3 className="title">
               {name}
             </h3>
-            <p>{tagline}</p>
+            <p className="mb-1">{tagline}</p>
           </div>
           <Favourite beer={beer} />
         </div>

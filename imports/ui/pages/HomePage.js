@@ -6,8 +6,8 @@ import Body from '../components/Body.js';
 import SearchForm from '../components/SearchForm.js';
 import AdvancedSearchForm from '../components/AdvancedSearchForm.js';
 import { fetchBeers, createQuery } from '../functions/functions.js';
-import AddFavouritePropToBeers from '../components/AddFavouritePropToBeers.js';
-import dummyData from '../components/data.js';
+import AddFavouritePropToBeers from '../helpers/AddFavouritePropToBeers.js';
+
 
 type Props = {
   isAdvancedSearchPage?: boolean,
@@ -20,9 +20,9 @@ class HomePage extends React.Component<Props> {
   };
 
   state = {
-    beers: dummyData.slice(0, 9),
+    beers: [],
     page: 1,
-    perPage: 10,
+    perPage: 25,
     searchQuery: '',
   };
 
@@ -34,7 +34,7 @@ class HomePage extends React.Component<Props> {
 
 
   componentDidMount() {
-    // this.fetchBeers();
+    this.fetchBeers();
   }
 
 
@@ -46,7 +46,6 @@ class HomePage extends React.Component<Props> {
       return;
     }
 
-    console.log(searchQuery);
     this.fetchBeers();
   }
 
@@ -99,11 +98,9 @@ class HomePage extends React.Component<Props> {
     const lastElementBeers = beers[beers.length - 1];
     const lastElementPrevBeers = prevBeers[prevBeers.length - 1];
 
-    if (!lastElementPrevBeers) {
+    if (!lastElementPrevBeers || !lastElementBeers) {
       return false;
     }
-
-    console.log(lastElementPrevBeers.id === lastElementBeers.id, lastElementPrevBeers.id, lastElementBeers.id);
 
     if (lastElementPrevBeers.id === lastElementBeers.id) {
       this.prevSearchQuery = createQuery(this.state);

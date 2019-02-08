@@ -1,7 +1,13 @@
+body{
+  background: #eee;
+}
 header{
   background: #f79400;
   color: #fff;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+body .sticky-top{
+  top: 50px;
 }
 
 .nav-link{
@@ -13,6 +19,12 @@ header{
 a.nav-link:hover{
   color: #fff;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.fixed-navbar-wrapper{
+  z-index: 999;
+  background: #f79400;
+  transition: all 0.5s ease;
 }
 
 .title{
@@ -27,15 +39,27 @@ a.nav-link:hover{
   transition: box-shadow 0.5s ease;
 }
 .beer:hover > div{
-  box-shadow: 1px 1px 15px 0 rgba(0, 0, 0, 0.35)
+  box-shadow: 1px 1px 15px 0 rgba(0, 0, 0, 0.5)
 }
 .beer img{
   max-height: 200px;
 }
+.beer p{
+  color: #777;
+}
+.loading-more-beers-wrapper img{
+  width: 50px;
+}
+img.favourite-stars{
+  width: 56px;
+  height: auto;
+}
 
+.beer-page{
+  color: #555;
+}
 .beer-page hr{
   width: 30%;
-  margin-left: 0;
   border: 3px solid #721f61;
 }
 
@@ -46,23 +70,21 @@ a.nav-link:hover{
   font-size: 1rem;
 }
 
-.load-next-page{
-  background: #eee;
-  padding: 5px;
-  width: 100%;
-}
-
 .modal-bg{
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 850px;
+  width: 90vw;
+  max-height: 700px;
+  height: 90vh;
   background: #fff;
   overflow: auto;
 }
-
 .centered-modal{
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.main-modal-img{
+  max-height: 400px;
 }
 
 @keyframes App-logo-spin {

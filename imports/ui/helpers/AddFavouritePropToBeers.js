@@ -14,7 +14,7 @@ class AddFavouritePropToBeers extends React.Component<Props> {
   getUpdatedBeers() {
     const { beers, favouriteBeers } = this.props;
 
-    if (!favouriteBeers) {
+    if (!favouriteBeers.length) {
       return beers;
     }
 

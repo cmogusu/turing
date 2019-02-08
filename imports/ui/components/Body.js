@@ -3,6 +3,8 @@ import React from 'react';
 import 'intersection-observer';
 import Beer from './Beer.js';
 import Modal from './Modal.js';
+import Loading from './Loading.js';
+import { getRecommendedBeersByIbu } from '../functions/functions.js';
 
 type Props = {
   beers: Array,
@@ -15,25 +17,17 @@ class Body extends React.Component<Props> {
   state = {
     isModalVisible: false,
     indexOfBeerInModal: -1,
+    areBeersExhausted: false,
   };
+
 
   intersectionElement = null;
 
-  imageIntersectionObserver = null;
-
+  beerIntersectionObserver = null;
 
   componentDidMount() {
     this.loadBeersOnPageScroll();
   }
-
-
-  toggleFavourite = (index) => {
-    const { beers } = this.props;
-    const beer = beers[index];
-    const { isFavourite = false, id } = beer;
-    console.log(isFavourite, id, beer);
-    // if (true) return;
-  };
 
 
   loadBeersOnPageScroll = () => {
@@ -42,15 +36,22 @@ class Body extends React.Component<Props> {
       rootMargin: '300px',
       threshold: 0,
     };
-    const loadNextPage = () => {
+    const loadNextPage = (entries) => {
+      const { isIntersecting } = entries[0];
       const {
         setPage,
         page,
         beers,
         perPage,
       } = this.props;
+      const areBeersExhausted = beers.length < (perPage * page);
 
-      if (beers.length < (perPage * page)) {
+      if (areBeersExhausted) {
+        this.setState({ areBeersExhausted });
+        return;
+      }
+
+      if (!isIntersecting) {
         return;
       }
 
@@ -68,39 +69,44 @@ class Body extends React.Component<Props> {
   };
 
 
-  loadBeerImageOnScroll = (imageElement) => {
+  animateBeerOnScroll = (beerWrapperElement) => {
     const loadImage = (entries, observer) => {
       entries.forEach(function(entry) {
-        const { target: image, isIntersecting } = entry;
+        const { target: wrapperElement, isIntersecting } = entry;
 
-        if (isIntersecting) {
-          const { dataset } = image;
-          const { src } = dataset;
-
-          if (src) {
-            image.src = src;
-          }
-
-          image.classList.remove('lazy-load');
-          observer.unobserve(image);
+        if (!isIntersecting) {
+          return;
         }
+
+        const image = wrapperElement.querySelector('.beer-image');
+        const { dataset } = image;
+        const { src } = dataset;
+
+        wrapperElement.classList.add('animated', 'slideInUp');
+
+        if (src) {
+          image.src = src;
+        }
+
+        image.classList.remove('lazy-load');
+        observer.unobserve(image);
       });
     };
 
-    if (!this.imageIntersectionObserver) {
+    if (!this.beerIntersectionObserver) {
       const intersectionOptions = {
         root: null,
         rootMargin: '1px',
-        threshold: 0.5,
+        threshold: 0,
       };
 
-      this.imageIntersectionObserver = new window.IntersectionObserver(
+      this.beerIntersectionObserver = new window.IntersectionObserver(
         loadImage,
         intersectionOptions,
       );
     }
 
-    this.imageIntersectionObserver.observe(imageElement);
+    this.beerIntersectionObserver.observe(beerWrapperElement);
   };
 
 
@@ -117,36 +123,34 @@ class Body extends React.Component<Props> {
     const {
       isModalVisible,
       indexOfBeerInModal,
+      areBeersExhausted,
     } = this.state;
-    const recommended = beers.slice(0, 3);
 
-    if (!beers) {
-      return (
-        <div>
-          Loading beers
-          <img src="" alt="loading beers" />
-        </div>
-      );
-    }
+    const recommendedBeers = isModalVisible ? getRecommendedBeersByIbu(beers, indexOfBeerInModal, 3) : [];
 
     return (
-      <main>
-        <div className="row no-gutters align-items-stretch">
-          {beers.map((beer, index) => (
-            <Beer
-              key={beer.id}
-              beer={beer}
-              setClicked={() => this.showModal(index)}
-              toggleFavourite={() => this.toggleFavourite(index)}
-              loadBeerImageOnScroll={this.loadBeerImageOnScroll}
-            />
-          ))}
-          <div className="load-next-page" ref={(element) => { this.intersectionElement = element; }} />
-        </div>
+      <main className="container">
+        {!!beers.length && (
+          <div className="row no-gutters align-items-stretch">
+            {beers.map((beer, index) => (
+              <Beer
+                key={beer.id}
+                beer={beer}
+                setClicked={() => this.showModal(index)}
+                animateBeerOnScroll={this.animateBeerOnScroll}
+              />
+            ))}
+          </div>
+        )}
+
+        {!areBeersExhausted && <Loading />}
+
+        <div ref={(element) => { this.intersectionElement = element; }} />
+
         <Modal
           isModalVisible={isModalVisible}
           activeBeer={beers[indexOfBeerInModal]}
-          recommendedBeers={recommended}
+          recommendedBeers={recommendedBeers}
           showModal={this.showModal}
           onClose={() => this.setState({ isModalVisible: false })}
         />
@@ -154,5 +158,6 @@ class Body extends React.Component<Props> {
     );
   }
 }
+
 
 export default Body;

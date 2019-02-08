@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import * as dateFns from 'date-fns';
-import { throttle, map, isNaN } from 'lodash';
+import { throttle, map, isNaN, isNumber } from 'lodash';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
 import { MuiPickersUtilsProvider, DatePicker } from 'material-ui-pickers';
@@ -61,7 +61,7 @@ class AdvancedSearchForm extends React.Component<Props> {
     };
 
     const searchQuery = map(searchQueryObj, (value, index) => (
-      value ? `${index}=${value}` : null
+      value || isNumber(value) ? `${index}=${value}` : null
     ))
       .filter(value => value)
       .join('&');

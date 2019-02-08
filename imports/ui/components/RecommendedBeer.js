@@ -3,6 +3,7 @@ import React from 'react';
 
 type Props = {
   name: string,
+  image_url: string,
   setClicked: Function,
 };
 
@@ -30,13 +31,13 @@ class RecommendedBeer extends React.Component<Props> {
 
     return (
       <div
-        className="col-sm-4 recommended-beer"
+        className="col-sm-4 mb-3 recommended-beer"
         onClick={setClicked}
         onKeyUp={this.handleKeyUp}
         role="button"
         tabIndex={0}
       >
-        <div className="text-center p-3 border rounded">
+        <div className="text-center p-3 mr-md-3 border rounded">
           <img alt={name} src={imageUrl} className="img-fluid" />
           <h4 className="title">{name}</h4>
         </div>
